@@ -1,0 +1,533 @@
+scheming_version: 2
+dataset_type: dataset_test_scheme # Isso será usado para definir a URL para procurar esse tipo de dataset (nesse caso)
+about: Esquema de datasets do CKAN para o Portal de Dados do RJ
+about_url: http://github.com/ckan/ckanext-scheming
+
+dataset_fields:
+
+- field_name: nome
+  label: Nome da base de dados
+  preset: title
+  form_placeholder: ex. COVID no RJ
+
+- field_name: url
+  label: URL
+  preset: dataset_slug
+  form_placeholder: eg. covid-rj
+  
+- field_name: org
+  label: Organização
+  preset: dataset_organization
+
+- field_name: descricao
+  label: Objetivo ou função da base de dados
+  form_snippet: markdown.html
+  form_placeholder: ex. Informações sobre número de vacinações, casos, hospitalizações e mortes por COVID-19 no estado do RJ.
+  help_text: O campo deve ser preenchido com uma breve descrição sobre o objetivo/função da base de dados.
+  required: true
+
+- field_name: tag_string
+  label: Palavras-chave
+  preset: tag_string_autocomplete
+  form_placeholder: ex. economia, saúde mental, governo
+  help_text: Preencha com pelo menos três palavras chave, separadas por vírgula e espaço. Por exemplo, "economia, saúde mental, governo".
+  required: true
+
+# Outra forma de registrar palavras-chave (não é capturada automaticamente pelo detector de tags na homepage)
+#- field_name: palavras_chave
+#  label: Palavras chave
+#  preset: multiple_text
+#  form_placeholder: ex. covid, vacinacao, casos
+#  help_text: Escreva pelo menos três palavras-chave.
+#  required: true
+  
+- field_name: License 
+  label: Licença de uso
+  form_snippet: license.html
+  help_text: Definições sobre licenças e informações adicionais podem ser encontradas em https://opendefinition.org/od/2.1/pt-br/
+
+- field_name: situacaoAtualizacao
+  label: Situação de atualização da base de dados
+  preset: select
+  choices:
+  - label: Ativa
+    value: ativa
+  - label: Inativa
+    value: inativa
+  help_text: Considera-se ativa a base que possui rotina de atualização e recebe novas informações. Inativas são as bases que não são atualizadas e/ou recebem  novos registros, sendo utilizada apenas para consulta. 
+  required: true
+
+- field_name: periodicidade
+  label: Periodicidade de atualização/extração
+  preset: select
+  choices:
+  - label: Não-atualizado
+    value: nao-atualizado
+  - label: Sob demanda
+    value: sob_demanda
+  - label: Automático
+    value: auto
+  - label: Horário
+    value: horario
+  - label: Diário
+    value: diario
+  - label: Semanal
+    value: semanal
+  - label: Quinzenal
+    value: bi-semanal
+  - label: Mensal
+    value: mensal
+  - label: Trimestral
+    value: trimestral
+  - label: Semestral
+    value: semestral
+  - label: Anual
+    value: anual
+  required: true
+  help_text: O campo "Automático" deve ser marcado para qualquer frequência de atualização inferior a 1 hora.
+
+###############################
+
+- field_name: tipo_armazenamento
+  label: Tipo de armazenamento dos dados
+  preset: select
+  choices:
+  - label: Arquivo de dados
+    value: arq_dados
+  - label: Banco de dados
+    value: banco_dados
+  required: true
+  help_text: Deve ser selecionada a opção que diz respeito ao tipo de armazenamento dos dados. A opção "Arquivo de dados" deve ser selecionada quando os dados estiverem armazenados em um arquivo, como por exemplo em uma planilha Excel. A opção "Bancos de dados" deve ser selecionada quando os dados estiverem estruturados em tabelas relacionadas ou conjuntos de arquivos. Os bancos de dados são operados pelos Sistemas Gerenciadores de Bancos de Dados. 
+
+##### Aqui adicionar um disclaimer: Caso a resposta ao campo "Tipo de armazenamento dos dados" tenha sido "Banco de dados", responder as perguntas X.XX e X.XX. Caso contrário, deixar as respostas em branco.
+# É possível incluir um validator?
+
+############## Aqui outra opção é deixar obrigatório e listar todos os sistemas possíveis (SEI, SIGA, SIAD, etc.) e colocar um "Não se aplica".
+- field_name: nomeBanco
+  label: Sistema de gestão de banco de dados
+  form_snippet: markdown.html
+  form_placeholder: ex. SIGA
+  help_text: Esse campo só deve ser preenchido caso a resposta ao campo "Tipo de armazenamento dos dados" tenha sido "Banco de dados". Caso o banco esteja vinculado a um sistema de gestão, indicar o nome do SGBD. Caso se trate de uma base que não configura um sistema, repetir o nome da base.
+
+- field_name: linguagemBanco
+  label: Linguagem do banco de dados
+  form_snippet: markdown.html
+  form_placeholder: ex. SQL
+  help_text: Esse campo só deve ser preenchido caso a resposta ao campo "Tipo de armazenamento dos dados" tenha sido "Banco de dados". Indicar a linguagem utilizada pela base ou sistema.
+
+- field_name: armazenamentoPRODERJ
+  label: O armazenamento da base é realizado no PRODERJ?
+  preset: select
+  choices:
+  - label: Sim
+    value: true
+  - label: Não
+    value: false
+  help_text: Esse campo só deve ser preenchido caso a resposta ao campo "Tipo de armazenamento dos dados" tenha sido "Banco de dados".
+
+- field_name: codPRODERJ
+  label: Código ou o nome da base no PRODERJ.
+  form_placeholder: ex. 1535166
+  help_text: Esse campo só deve ser preenchido caso a resposta ao campo "O armazenamento da base é realizado no PRODERJ?" tenha sido "Sim". Indicar o código da base ou sistema no PRODERJ. Caso este não puder ser obtido, indicar o nome da base ou sistema no PRODERJ.
+
+- field_name: linkAcessoBase
+  label: Link de acesso ao conjunto de dados
+  form_placeholder: http://example.com/dados/
+  display_property: foaf:homepage
+  display_snippet: link.html
+  help_text: Se houver endereço eletrônico para consulta e/ou download do conjunto de dados, o link deve ser informado neste campo.
+
+########################################
+
+- field_name: historico
+  label: Histórico
+  form_snippet: markdown.html
+  form_placeholder: ex. A base foi criada em fev/2021 como 
+  help_text: Deve-se recuperar o histórico de criação da base, descrevendo informações como o ano de criação e/ou publicação/disponibilização da versão e informações sobre os moivos de criação da base.
+  required: true
+
+- field_name: version
+  label: Versão atual
+  validators: ignore_missing unicode_safe package_version_validator
+  form_placeholder: '1.0'
+  help_text: O campo deve ser preenchido com o número da versão mais atual utilizando o formato 'NUM1.NUM2', onde NUM1 e NUM2 são números inteiros positivos.
+
+- field_name: glossario
+  label: Existe glossário ou dicionário de dados?
+  preset: select
+  choices:
+  - label: Sim
+    value: sim
+  - label: Não
+    value: nao
+  required: true
+  help_text: Glossário ou dicionário de dados é um documento que fornece a descrição e significado de campos e termos contidos na base.
+
+##################################################### Parte legal: existência de dados pessoais/situações de sigilo
+
+- field_name: observanciaLegal
+  label: Qual é a observância legal do conjunto de dados (situação de sigilo)?
+  preset: multiple_checkbox
+  choices:
+  - label: Público
+    value: 1
+  - label: Restrito - Direito Autoral (Lei nº 9.610/1998)
+    value: 2
+  - label: Restrito - Informação Pessoal (Art. 31 da Lei nº 12.527/2011)
+    value: 3
+  - label: Restrito - Propriedade Intelectual (software) (Lei nº 9.609/1998)
+    value: 4
+  - label: Restrito - Protocolo pendente de análise de restrição (Art. 6º, III, da Lei nº 12.527/2011)
+    value: 5
+  - label: Restrito - Restrição de Acesso a Documento Preparatório (Art. 7º, §3º, da Lei nº 12.527/2011)
+    value: 6
+  - label: Restrito - Segredo de Justiça no Processo Civil (Art. 189 da Lei 13.105/2015)
+    value: 7
+  - label: Restrito - Segredo de Justiça no Processo Penal (Art. 201, §6º, do Decreto-Lei 3.689/1941)
+    value: 8
+  - label: Restrito - Segredo Industrial (Lei nº 9.279/1996)
+    value: 9
+  - label: Restrito - Sigilo Comercial (Sociedades Anônimas) (Art. 155, § 2º da Lei nº 6.404/1976)
+    value: 10
+  - label: Restrito - Sigilo Contábil (Art. 1.190 da Lei nº 10.406/2002)
+    value: 11
+  - label: Restrito - Sigilo de nome, imagem, qualificação e demais info (Art. 5º, II da Lei 12.850/13)
+    value: 12
+  - label: Restrito - Sigilo do Inquérito Policial (Art. 20 do Decreto-Lei 3.689/1941)
+    value: 13
+  - label: Restrito - Sigilo do Procedimento Admin. Disciplinar em Curso (Art. 150 da Lei nº 8.112/1990)
+    value: 14
+  - label: Restrito - Sigilo dos autos (Art. 7° da Resolução CNMP n° 23/2007)
+    value: 15
+  - label: Restrito - Sigilo Empresarial (Art. 169 da Lei nº 11.101/2005)
+    value: 16
+  - label: Restrito - Sigilo Funcional - SFC (Art. 26, §3º, da Lei nº 10.180/2001)
+    value: 17
+  - label: Restrito - Sigilo por Possibilidade de Risco ou Dano (Art. 45 do Decreto nº 7.845/2012)
+    value: 18
+  - label: Restrito - Sigilo Procedimento Admin. de Responsabilização (Art. 5º do Decreto nº 11.129/2022)
+    value: 19
+  - label: Restrito - Sigilo Profissão do Advogado (Art. 7°, inciso II, da Lei n°11.767/2008)
+    value: 20
+  - label: Sigiloso - Documento Preparatório - Sigiloso (Art. 7º, § 3º, da Lei nº 12.527/2001)
+    value: 21
+  - label: Sigiloso - Informação Pessoal Sensível (Art. 31 da Lei nº 12.527/2011)
+    value: 22
+  - label: Sigiloso - Reserva do Processo Ético (Art. 13 do Decreto nº 6.029/2007 e Art. 14 da Reso)
+    value: 23
+  - label: Sigiloso - Segredo de Justiça no Processo Civil (Art. 189 da Lei 13.105/2015)
+    value: 24
+  - label: Sigiloso - Segredo de Justiça no Processo Penal (Art. 201, §6º, do Decreto-Lei 3.689/1941)
+    value: 25
+  - label: Sigiloso - Sigilo Bancário (Art. 1º da Lei Complementar nº 105/2001b)
+    value: 26
+  - label: Sigiloso - Sigilo Fiscal (Art. 198, caput, da Lei nº 5.172/1966)
+    value: 27
+  - label: Sigiloso - Sigilo de Acordo de Leniência (Art. 31, §1º, do Decreto nº 8.420/2015)
+    value: 28
+  - label: Sigiloso - Sigilo de PAD em curso p/ servidores da CGU (Art. 150 da Lei nº 8.112/1990)
+    value: 29
+  - label: Sigiloso - Sigilo do Inquérito Policial (Art. 20 do Decreto-Lei 3.689/1941)
+    value: 30
+  - label: Sigiloso - Sigilo dos autos (Art. 7° da Resolução CNMP n° 23/2007)
+    value: 31
+  - label: Sigiloso - Sigilo Funcional - SFC (Art. 26, §3º, da Lei nº 10.180/2001)
+    value: 32
+  - label: Sigiloso - Sigilo Procedimento Administ. de Responsabilização (Art. 5º do Decreto nº 11.129/2022)
+    value: 33
+  - label: Sigiloso - Sigilo Profissão de Advogado (Art. 7°, inciso II, da Lei n°11.767/2008)
+    value: 34
+  required: true
+  help_text: "R"
+  
+- field_name: dadosRacaEtnia
+  label: Possui dados de raça/etnia?
+  preset: select
+  choices:
+  - label: Sim
+    value: true
+  - label: Não
+    value: false
+  required: true
+
+- field_name: dadosGenero
+  label: Possui dados de gênero?
+  preset: select
+  choices:
+  - label: Sim
+    value: true
+  - label: Não
+    value: false
+  required: true
+
+# Talvez um box aqui para agrupar toda a área de dados pessoais?
+
+- field_name: dados_pessoais
+  label: A base contém dados pessoais?
+  preset: select
+  choices:
+  - label: Sim
+    value: sim
+  - label: Não
+    value: nao
+  required: true
+  help_text: Consideramos o conceito de dado pessoal previsto na Lei Geral de Proteção de Dados, que o define como “informação relacionada a pessoa natural identificada ou identificável”.
+
+- field_name: titulares
+  label: Titulares de bases pessoais
+  preset: select
+  choices:
+  - label: A
+    value: a
+  - label: B
+    value: b
+  help_text: Titular de dados pessoais deverá ser considerado como a pessoa natural (pessoa física) a quem se referem os dados pessoais que são objeto de tratamento (art. 5º, V, da LGPD). Deve ser selecionada a opção que melhor define  qual categoria de titulares de bases pessoais se  referem os dados contidos na base. Na hipótese de  haver mais de uma categoria, deve ser selecionada  aquela que conta com o maior número de registros  na base. Se a base não possuir dados pessoais, este campo não deverá ser preenchido. 
+
+- field_name: operadores
+  label: Operadores de dados pessoais
+  preset: select
+  choices:
+  - label: A
+    value: a
+  - label: B
+    value: b
+  help_text: Deve ser selecionada a opção que informa quem é o operador que realiza tratamento de dados  pessoais, quando houver. Para a finalidade deste campo, deverá ser considerada como operador a pessoa física ou jurídica contratada pelo controlador  para realizar o tratamento de dados, conforme as  instruções da SEPLAG. As ações de tratamento de  dados devem ser consideradas em seu conceito mais  amplo, englobando, dentre outros, as atividades de coleta e armazenamento de dados. Se a base não possuir dados pessoais, este campo não deverá ser  preenchido.  
+
+- field_name: controlador_conjunto
+  label: Há controlador conjunto de dados pessoais?
+  preset: select
+  choices:
+  - label: Sim
+    value: sim
+  - label: Não
+    value: nao
+  help_text: Deve ser selecionada a opção que informa se há  controlador conjunto da base de dados. Entende-se a  controladoria conjunta se caracteriza pela existência  de determinação conjunta, comum ou convergente,  por dois ou mais controladores, das finalidades e  dos elementos essenciais para a realização do  tratamento de dados pessoais, por meio de acordo  que estabeleça as respectivas responsabilidades  quanto ao cumprimento da LGPD. Se a base não  possuir dados pessoais, este campo não deverá ser preenchido.
+
+- field_name: finalidade_tratamento
+  label: Finalidade do tratamento de dados pessoais
+  help_text: Deve ser descrita qual é a finalidade/objetivo do tratamento de dados pessoais. Se a base não possuir dados pessoais, este campo não deverá ser preenchido.
+  required: true
+
+########################################### Situação atual de abertura da base
+
+- field_name: dadosAbertos
+  label: A base de dados é aberta?
+  preset: select
+  choices:
+  - label: Sim
+    value: true
+  - label: Não
+    value: false
+  required: true
+  help_text: Deve ser selecionada a opção que informa se os dados contidos na base de dados estão disponibilizados no formato de dados abertos em site oficial.
+
+- field_name: rjgov
+  label: Disponível em rj.gov.br?
+  preset: select
+  choices:
+  - label: Sim
+    value: true
+  - label: Não
+    value: false
+  required: true
+  help_text: Deve ser selecionada a opção que informa se os dados contidos na base de dados estão disponibilizados no site rj.gov.br.
+
+- field_name: relacaoODS
+  label: Possui relação com os Objetivos de Desenvolvimento Sustentável?
+  preset: select
+  choices:
+  - label: Sim
+    value: true
+  - label: Não
+    value: false
+  required: true
+  help_text: Uma descrição sobre Objetivos de Desenvolvimento Sustentável pode ser encontrada em https://brasil.un.org/pt-br/sdgs.
+
+- field_name: ods
+  label: Qual é a observância legal do conjunto de dados (situação de sigilo)?
+  preset: multiple_checkbox
+  choices:
+  - label: Erradicação da Pobreza
+    value: 1
+  - label: Fome Zero e Agricultura Sustentável
+    value: 2
+  - label: Saúde e Bem-Estar
+    value: 3
+  - label: Educação de Qualidade
+    value: 4
+  - label: Igualdade de Gênero
+    value: 5
+  - label: Água Limpa e Saneamento
+    value: 6
+  - label: Energia Limpa e Acessível
+    value: 7
+  - label: Trabalho Decente e Crescimento Econômico
+    value: 8
+  - label: Indústria, Inovação e Infraestrutura
+    value: 9
+  - label: Redução das Desigualdades
+    value: 10
+  - label: Cidades e Comunidades Sustentáveis
+    value: 11
+  - label: Consumo e Produção Sustentáveis
+    value: 12
+  - label: Ação contra a Mudança Global do Clima
+    value: 13
+  - label: Vida na Água
+    value: 14
+  - label: Vida Terrestre
+    value: 15
+  - label: Paz, Justiça e Instituições Eficazes
+    value: 16
+  - label: Parcerias e Meios de Implementação
+    value: 17
+  help_text: A descrição de cada Objetivo de Desenvolvimento Sustentável pode ser encontrada em https://brasil.un.org/pt-br/sdgs.
+
+# Atualizar campos
+
+# - field_name: autor_nome
+#   label: Autor da base
+#   form_placeholder: Maria da Silva
+#   display_property: dc:creator
+
+# - field_name: autor_email
+#   label: E-mail do autor
+#   form_placeholder: joe@example.com
+#   display_property: dc:creator
+#   display_snippet: email.html
+#   display_email_name_field: author
+
+################################### 
+
+# start_form_page?
+
+# Pode ter mais de um gestor? Pode ter mais de um contribuidor?
+
+#### Aqui criar box "Gestor da base"
+
+- field_name: gestor_nome
+  label: Gestor responsável
+  form_placeholder: ex. Maria da Silva
+  display_property: dc:contributor
+  required: true
+
+- field_name: gestor_email
+  label: E-mail de contato do gestor responsável
+  form_placeholder: ex. maria@exemplo.com
+  display_property: dc:contributor
+  display_snippet: email.html
+  display_email_name_field: gestor_nome
+  required: true
+
+- field_name: gestor_telefone
+  label: Telefone de contato do gestor responsável
+  form_placeholder: (xx)xxxxx-xxxx
+  help_text: Use o formato (xx)xxxxx-xxxx
+  required: true
+
+################################ Aqui criar box "Unidade responsável pela base"
+
+
+- field_name: unidade_nome
+  label: Unidade responsável
+  form_placeholder: ex. SETD
+  display_property: dc:contributor
+  required: true
+
+- field_name: unidade_email
+  label: E-mail de contato da unidade responsável
+  form_placeholder: maria@exemplo.com
+  display_property: dc:contributor
+  display_snippet: email.html
+  display_email_name_field: unidade_nome
+  required: true
+
+- field_name: unidade_telefone
+  label: Telefone de contato da unidade responsável
+  form_placeholder: (xx)xxxxx-xxxx
+  help_text: Use o formato (xx)xxxxx-xxxx
+  required: true
+
+########################################
+
+resource_fields:
+
+- field_name: url
+  label: URL
+  preset: resource_url_upload
+
+- field_name: nome
+  label: Nome do arquivo
+  form_placeholder: eg. January 2011 Gold Prices
+
+- field_name: descricao
+  label: Descrição
+  form_snippet: markdown.html
+  form_placeholder: ex. Informações sobre número de vacinações, casos, hospitalizações e mortes por COVID-19 no estado do RJ.
+  help_text: O campo deve ser preenchido com uma breve descrição sobre o objetivo/função da base de dados.
+
+- field_name: format
+  label: Formato
+  preset: resource_format_autocomplete
+
+- field_name: coberturaTemporalInicio
+  label: Data de registro mais antigo
+  preset: date
+
+- field_name: coberturaTemporalFim
+  label: Data de registro mais recente
+  preset: date
+
+#### Aqui definir menu de seleção ou deixar livre?
+
+- field_name: granularidadeEspacial
+  label: Granularidade espacial
+  form_placeholder: ex. país, estado, município, bairro, rua, etc.
+  help_text: Precisão (menor nível de representação) da cobertura geográfica.
+
+- field_name: regTemporal
+  label: O dado contém registro temporal?
+  preset: select
+  choices:
+  - label: Sim
+    value: sim
+  - label: Não
+    value: nao
+  required: true
+  help_text: Responda sim caso o recurso contenha dados temporais.
+
+- field_name: granularidadeTemporal
+  label: Caso a resposta anterior tenha sido "Sim", indique o nível de granularidade temporal.
+  preset: select
+  choices:
+  - label: Sob Demanda
+    value: sob_demanda
+  - label: Segundos
+    value: segundos
+  - label: Minutos
+    value: minutos
+  - label: Horário
+    value: horario
+  - label: Diário
+    value: diario
+  - label: Semanal
+    value: semanal
+  - label: Quinzenal
+    value: bi-semanal
+  - label: Mensal
+    value: mensal
+  - label: Trimestral
+    value: trimestral
+  - label: Semestral
+    value: semestral
+  - label: Anual
+    value: anual
+  help_text: Precisão da cobertura temporal.
+
+  
+- field_name: linkAcessoBase
+  label: Link de acesso
+  form_placeholder: http://example.com/dataset.json
+  display_property: foaf:homepage
+  display_snippet: link.html
+  help_text: Se houver endereço eletrônico para consulta e/ou download do dataset, o link deve ser informado neste campo.
